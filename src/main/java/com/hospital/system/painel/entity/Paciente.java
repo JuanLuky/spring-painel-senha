@@ -1,7 +1,10 @@
 package com.hospital.system.painel.entity;
 
+import com.hospital.system.painel.enums.StatusPaciente;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -10,6 +13,8 @@ import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tb_paciente")
 public class Paciente {
 
@@ -22,6 +27,11 @@ public class Paciente {
 
     private boolean prioridade; // indica se o paciente tem prioridade
 
+    // Status do paciente, aguardando, em atendimento, etc.
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_paciente")
+    private StatusPaciente status;
+
     @CreationTimestamp
     @Column(name = "data_cadastro", updatable = false)
     private LocalDateTime dataCadastro;
@@ -29,14 +39,6 @@ public class Paciente {
     // Relacionamento com Senha
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Senha> senhas = new ArrayList<>();
-
-
-    public Paciente() {
-        this.dataCadastro = LocalDateTime.now();
-
-        // Inicializa a prioridade como falsa
-        this.prioridade = false;
-    }
 
     // Garante que a data seja definida mesmo sem @CreationTimestamp
     @PrePersist

@@ -6,6 +6,7 @@ import com.hospital.system.painel.entity.Consultorio;
 import com.hospital.system.painel.entity.Paciente;
 import com.hospital.system.painel.entity.Senha;
 import com.hospital.system.painel.enums.StatusConsultorio;
+import com.hospital.system.painel.enums.StatusPaciente;
 import com.hospital.system.painel.mapper.SenhaMapper;
 import com.hospital.system.painel.repository.ConsultorioRepository;
 import com.hospital.system.painel.repository.PacienteRepository;
@@ -66,6 +67,11 @@ public class SenhaService {
         Consultorio consultorio = consultorioDisponivel.get();
         consultorio.setStatus(StatusConsultorio.OCUPADO);
         consultorioRepository.save(consultorio); // <- salva a mudança de status
+
+        // Atualiza o status do paciente para EM_ATENDIMENTO
+        Paciente paciente = pacienteOpt.get();
+        paciente.setStatus(StatusPaciente.EM_ATENDIMENTO);
+        pacienteRepository.save(paciente); // <- salva a mudança de status
 
         // Salvar a senha no banco de dados
         Senha senhaSalva = senhaRepository.save(senha);

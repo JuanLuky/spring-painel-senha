@@ -7,6 +7,7 @@ import com.hospital.system.painel.entity.Consultorio;
 import com.hospital.system.painel.entity.Paciente;
 import com.hospital.system.painel.entity.Senha;
 import com.hospital.system.painel.enums.StatusConsultorio;
+import com.hospital.system.painel.enums.StatusPaciente;
 import com.hospital.system.painel.mapper.PacienteMapper;
 import com.hospital.system.painel.repository.ConsultorioRepository;
 import com.hospital.system.painel.repository.PacienteRepository;
@@ -41,6 +42,9 @@ public class PacienteService {
         paciente.setId(dto.id());
         paciente.setNome(dto.nome());
         paciente.setPrioridade(dto.prioridade());
+
+        // Definir o status do paciente como Não Atendido
+        paciente.setStatus(StatusPaciente.NAO_ATENDIDO);
 
         // Salvar o paciente no banco de dados
         Paciente pacienteSalvo = pacienteRepository.save(paciente);
@@ -91,9 +95,9 @@ public class PacienteService {
         return PacienteMapper.toDTO(paciente);
     }
 
-    public Optional<PacienteDTO> buscarProximoPaciente() {
-        return pacienteRepository.findFirstByOrderByPrioridadeDescDataCadastroAsc()
-                .map(PacienteMapper::toDTO);
-    }
+//    public Optional<PacienteDTO> buscarProximoPaciente() {
+//        return pacienteRepository.findFirstByOrderByPrioridadeDescDataCadastroAsc()
+//                .map(PacienteMapper::toDTO);
+//    }
 
 }

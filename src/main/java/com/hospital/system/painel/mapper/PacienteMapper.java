@@ -11,6 +11,7 @@ public class PacienteMapper {
                 paciente.getId(),
                 paciente.getNome(),
                 paciente.isPrioridade(),
+                paciente.getStatus(),
                 paciente.getDataCadastro()
         );
     }

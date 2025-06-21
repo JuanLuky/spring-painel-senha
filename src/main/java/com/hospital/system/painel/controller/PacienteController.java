@@ -25,10 +25,11 @@ public class PacienteController {
         return ResponseEntity.ok(pacienteService.cadastrarPaciente(dto));
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<PacienteDTO> buscarPacientes(@RequestParam Long id) {
-//        return ResponseEntity.ok(pacienteService.buscarPaciente(id));
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<PacienteDTO> buscarPacientes(@RequestParam Long id) {
+        return ResponseEntity.ok(pacienteService.buscarPaciente(id));
+    }
+
     @GetMapping
     public ResponseEntity<List<PacienteDTO>> listarPacientes() {
         return ResponseEntity.ok(pacienteService.listarPacientes());
