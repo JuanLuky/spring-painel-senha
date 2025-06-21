@@ -85,11 +85,11 @@ public class SenhaService {
                 .toList();
     }
 
-//    public List<SenhaDTO> listarSenhasNaochamadas() {
-//        List<Senha> senhas = senhaRepository.findByChamadoFalse();
-//        return senhas.stream()
-//                .filter(s -> !s.isChamado())
-//                .map(SenhaMapper::toDTO)
-//                .toList();
-//    }
+    public List<SenhaDTO> listarSenhasNaochamadas() {
+        List<Senha> senhas = senhaRepository.findByChamadoFalse();
+        return senhas.stream()
+                .filter(s -> !s.isChamado())
+                .map(SenhaMapper::toDTO)
+                .toList();
+    }
 }

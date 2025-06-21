@@ -27,8 +27,8 @@ public class SenhaController {
         return ResponseEntity.ok(senhaService.listarSenhasChamadas());
     }
 
-//    @GetMapping("/listar-senhas-nao-chamadas")
-//    public  ResponseEntity<List<SenhaDTO>> listarSenhasNaoChamadas() {
-//        return ResponseEntity.ok(senhaService.listarSenhasNaochamadas());
-//    }
+    @GetMapping("/listar-senhas-nao-chamadas")
+    public  ResponseEntity<List<SenhaDTO>> listarSenhasNaoChamadas() {
+        return ResponseEntity.ok(senhaService.listarSenhasNaochamadas());
+    }
 }
