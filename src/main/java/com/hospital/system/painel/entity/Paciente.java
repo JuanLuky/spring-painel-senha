@@ -23,7 +23,7 @@ public class Paciente {
     @Column(name = "paciente_id")
     private Long id;
 
-    @Column(name = "nome", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String nome;
 
     private boolean prioridade; // indica se o paciente tem prioridade
