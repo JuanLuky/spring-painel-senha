@@ -10,6 +10,7 @@ public class PacienteMapper {
         return new PacienteDTO(
                 paciente.getId(),
                 paciente.getNome(),
+                paciente.getCpf(),
                 paciente.isPrioridade(),
                 paciente.getStatus(),
                 paciente.getDataCadastro()

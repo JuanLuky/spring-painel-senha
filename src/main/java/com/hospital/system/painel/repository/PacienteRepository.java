@@ -12,6 +12,10 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
     Optional<Paciente> findFirstByOrderByPrioridadeDescDataCadastroAsc();
 
 
+    List<Paciente> existsByNomeIgnoreCase(String nome);
+
+    Optional<Paciente> findByCpf(String cpf);
+
 
     // Ordena por dataCadastro em ordem DESCENDENTE (mais recente primeiro)
     List<Paciente> findAllByOrderByDataCadastroAsc();

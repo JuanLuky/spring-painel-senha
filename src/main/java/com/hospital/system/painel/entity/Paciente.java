@@ -1,5 +1,6 @@
 package com.hospital.system.painel.entity;
 
+import com.hospital.system.painel.dto.PacienteCreateDTO;
 import com.hospital.system.painel.enums.StatusPaciente;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,8 +24,11 @@ public class Paciente {
     @Column(name = "paciente_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false, unique = true)
+    private String cpf;
 
     private boolean prioridade; // indica se o paciente tem prioridade
 
@@ -45,5 +49,12 @@ public class Paciente {
     @PrePersist
     protected void onCreate() {
         this.dataCadastro = LocalDateTime.now();
+    }
+
+    public Paciente(PacienteCreateDTO dto) {
+        this.nome = dto.nome();
+        this.cpf = dto.cpf();
+        this.prioridade = dto.prioridade();
+        this.status = StatusPaciente.NAO_ATENDIDO;
     }
 }

@@ -38,18 +38,14 @@ public class PacienteService {
 
     public PacienteDTO cadastrarPaciente(@NotNull PacienteCreateDTO dto) {
         // Aqui você pode adicionar a lógica para cadastrar o paciente
-        Paciente paciente = new Paciente();
-        paciente.setId(dto.id());
-        paciente.setNome(dto.nome());
-        paciente.setPrioridade(dto.prioridade());
+        Paciente paciente = new Paciente(dto);
 
-        // Definir o status do paciente como Não Atendido
-        paciente.setStatus(StatusPaciente.NAO_ATENDIDO);
+        // Verificar se o CPF já está cadastrado
+        pacienteRepository.findByCpf(paciente.getCpf()).orElseThrow(() -> new RuntimeException("CPF já cadastrado"));
 
-        // Salvar o paciente no banco de dados
         Paciente pacienteSalvo = pacienteRepository.save(paciente);
-        // Retornar o paciente salvo como DTO
-        return PacienteMapper.toDTO(pacienteSalvo);
+
+        return new PacienteDTO(pacienteSalvo);
     }
 
     @Transactional
