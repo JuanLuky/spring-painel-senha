@@ -8,6 +8,7 @@ import com.hospital.system.painel.entity.Paciente;
 import com.hospital.system.painel.entity.Senha;
 import com.hospital.system.painel.enums.StatusConsultorio;
 import com.hospital.system.painel.enums.StatusPaciente;
+import com.hospital.system.painel.infra.exception.NotFoundException;
 import com.hospital.system.painel.mapper.PacienteMapper;
 import com.hospital.system.painel.repository.ConsultorioRepository;
 import com.hospital.system.painel.repository.PacienteRepository;
@@ -37,15 +38,16 @@ public class PacienteService {
     }
 
     public PacienteDTO cadastrarPaciente(@NotNull PacienteCreateDTO dto) {
-        // Aqui você pode adicionar a lógica para cadastrar o paciente
         Paciente paciente = new Paciente(dto);
 
         // Verificar se o CPF já está cadastrado
-        pacienteRepository.findByCpf(paciente.getCpf()).orElseThrow(() -> new RuntimeException("CPF já cadastrado"));
+        var userExist = pacienteRepository.findByCpf(paciente.getCpf());
+        if (!userExist.isPresent()) {
+            Paciente pacienteSalvo = pacienteRepository.save(paciente);
 
-        Paciente pacienteSalvo = pacienteRepository.save(paciente);
-
-        return new PacienteDTO(pacienteSalvo);
+            return new PacienteDTO(pacienteSalvo);
+        }
+        throw new NotFoundException("Paciente com CPF já cadastrado!");
     }
 
     @Transactional
