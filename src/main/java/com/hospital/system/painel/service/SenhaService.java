@@ -33,44 +33,39 @@ public class SenhaService {
         this.senhaWebSocketController = senhaWebSocketController;
     }
 
-    public SenhaDTO chamarPaciente(Long pacienteid)  {
+    public SenhaDTO chamarPaciente(Long pacienteid, Long consultorioId)  {
 
-        Optional<Paciente> pacienteOpt = pacienteRepository.findById(pacienteid);
-        boolean pacienteJaChamado = senhaRepository.existsByPacienteIdAndChamadoTrue(pacienteid);
+        // Verificar se o paciente existe
+        Paciente paciente = pacienteRepository.findById(pacienteid)
+                .orElseThrow(() -> new NotFoundException("Paciente não encontrado"));
 
-        if (pacienteJaChamado) {
+        // Verificar se o paciente já está em atendimento
+        if (senhaRepository.existsByPacienteIdAndChamadoTrue(pacienteid)) {
             throw new NotFoundException("Este paciente já foi chamado e está em atendimento.");
         }
 
-        if(pacienteOpt.isEmpty()) {
-            throw new NotFoundException("Paciente não encontrado");
+        // Buscar o consultório selecionado
+        Consultorio consultorio = consultorioRepository.findById(consultorioId)
+                .orElseThrow(() -> new NotFoundException("Consultório não encontrado"));
+
+        // Verificar se o consultório está disponível
+        if (consultorio.getStatus() != StatusConsultorio.DISPONIVEL) {
+            throw new NotFoundException("O consultório selecionado não está disponível no momento.");
         }
 
-        // buscar um consultório ativo e disponível
-        List<Consultorio> consultorios = consultorioRepository.findAll();
-        Optional<Consultorio> consultorioDisponivel = consultorios.stream()
-                .filter(c -> c.getStatus() == StatusConsultorio.DISPONIVEL)
-                .findFirst();
-
-        if(consultorioDisponivel.isEmpty()) {
-            throw new NotFoundException("Nenhum consultório disponível para atendimento no momento.");
-        }
 
         // Criar uma senha
         Senha senha = new Senha();
-        senha.setId(senha.getId());
-        senha.setPaciente(pacienteOpt.get());
-        senha.setConsultorio(consultorioDisponivel.get());
+        senha.setPaciente(paciente);
+        senha.setConsultorio(consultorio);
         senha.setChamado(true);
         senha.setDataHora(LocalDateTime.now());
 
-        // Atualiza status do consultório para OCUPADO
-        Consultorio consultorio = consultorioDisponivel.get();
+        // Atualizar status do consultório para OCUPADO
         consultorio.setStatus(StatusConsultorio.OCUPADO);
         consultorioRepository.save(consultorio); // <- salva a mudança de status
 
         // Atualiza o status do paciente para EM_ATENDIMENTO
-        Paciente paciente = pacienteOpt.get();
         paciente.setStatus(StatusPaciente.EM_ATENDIMENTO);
         pacienteRepository.save(paciente); // <- salva a mudança de status
 

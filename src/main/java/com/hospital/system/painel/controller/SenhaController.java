@@ -18,8 +18,10 @@ public class SenhaController {
     }
 
     @PostMapping("/chamar/{pacienteId}")
-    public ResponseEntity<SenhaDTO> chamarPacientes(@PathVariable Long pacienteId) {
-        return ResponseEntity.ok(senhaService.chamarPaciente(pacienteId));
+    public ResponseEntity<SenhaDTO> chamarPacientes(
+            @PathVariable Long pacienteId,
+            @RequestParam Long consultorioId) {
+        return ResponseEntity.ok(senhaService.chamarPaciente(pacienteId, consultorioId));
     }
 
     @GetMapping("/listar-senhas-chamadas")
