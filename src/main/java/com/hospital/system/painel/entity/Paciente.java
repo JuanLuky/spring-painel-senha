@@ -16,7 +16,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_paciente")
+@Table(name = "tb_paciente", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "cpf", name = "cpf_paciente")})
+
 public class Paciente {
 
     @Id

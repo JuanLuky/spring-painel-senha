@@ -7,6 +7,7 @@ import com.hospital.system.painel.entity.Paciente;
 import com.hospital.system.painel.entity.Senha;
 import com.hospital.system.painel.enums.StatusConsultorio;
 import com.hospital.system.painel.enums.StatusPaciente;
+import com.hospital.system.painel.infra.exception.NotFoundException;
 import com.hospital.system.painel.mapper.SenhaMapper;
 import com.hospital.system.painel.repository.ConsultorioRepository;
 import com.hospital.system.painel.repository.PacienteRepository;
@@ -38,11 +39,11 @@ public class SenhaService {
         boolean pacienteJaChamado = senhaRepository.existsByPacienteIdAndChamadoTrue(pacienteid);
 
         if (pacienteJaChamado) {
-            throw new RuntimeException("Este paciente já foi chamado e está em atendimento.");
+            throw new NotFoundException("Este paciente já foi chamado e está em atendimento.");
         }
 
         if(pacienteOpt.isEmpty()) {
-            throw new RuntimeException("Paciente não encontrado");
+            throw new NotFoundException("Paciente não encontrado");
         }
 
         // buscar um consultório ativo e disponível
@@ -52,7 +53,7 @@ public class SenhaService {
                 .findFirst();
 
         if(consultorioDisponivel.isEmpty()) {
-            throw new RuntimeException("Nenhum consultório disponível");
+            throw new NotFoundException("Nenhum consultório disponível para atendimento no momento.");
         }
 
         // Criar uma senha
